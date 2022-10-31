@@ -1,0 +1,38 @@
+{   
+    "data": 
+    {
+        "data path": "/Users/abdelrahmanaltawil/Local Mac/GitHub/multiple-sclerosis/src/resources/2MWT_data.xlsx",
+        "decimal separator": ",",
+        "features": [
+            [37,127]
+        ],
+        "label": [10],
+        "trainingRatio": 0.7
+    },
+    
+    "neural network": 
+    {
+        "model": "None",
+        "spread": 6,
+        "width": 5,
+        "activation": [
+            "relu"
+        ],
+
+        "optimzer": 
+        {
+            "name": "Adam",
+            "LR": 0.1,
+            "epoch": 1000
+        },
+
+        "quality": 
+        {
+            "loss": "mse",
+            "metrics": [
+                "mae",
+                "mse"
+            ]
+        }
+    }
+}
