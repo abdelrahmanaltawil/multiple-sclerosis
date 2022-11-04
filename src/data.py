@@ -176,6 +176,6 @@ if __name__ == "__main__":
     data = Data(settings["data"])
 
     data.clean()
-    traning, testing = data.split_samples(train_size=0.7)
+    traning, testing = data.split_samples(settings["data"]["training ratio"])
 
     data.summary()
