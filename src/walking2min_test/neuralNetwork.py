@@ -9,7 +9,7 @@ src_path = Path(__file__).parents[0].__str__()
 sys.path.append(src_path) if src_path not in sys.path else None
 
 # local imports
-from data import Data 
+from walking2min_test.data import Data 
 
 
 
