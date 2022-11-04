@@ -8,7 +8,7 @@ import sklearn.model_selection as skl
 from tabulate import tabulate
 
 # setup work directory
-src_path = Path(__file__).parents[0].__str__()
+src_path = Path(__file__).parents[1].__str__()
 sys.path.append(src_path) if src_path not in sys.path else None
 
 # local imports
@@ -170,7 +170,7 @@ class Data:
 
 if __name__ == "__main__":
 
-    settings = json.load(open(Path(src_path + '/resources/settings.json')))
+    settings = json.load(open(Path(src_path + '/walking2min_test/resources/settings.json')))
 
 
     data = Data(settings["data"])
