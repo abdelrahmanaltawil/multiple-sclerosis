@@ -7,14 +7,14 @@
             [37,127]
         ],
         "label": [10],
-        "trainingRatio": 0.7
+        "training ratio": 0.7
     },
     
     "neural network": 
     {
         "model": "None",
         "spread": 6,
-        "width": 5,
+        "depth": 5,
         "activation": [
             "relu"
         ],
