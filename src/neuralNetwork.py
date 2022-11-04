@@ -1,9 +1,15 @@
+# env imports
+import sys
 import json
-from tabnanny import verbose
-from data import Data 
-from tabulate import tabulate
-
+from pathlib import Path
 from tensorflow import keras
+
+# setup work directory
+src_path = Path(__file__).parents[0].__str__()
+sys.path.append(src_path) if src_path not in sys.path else None
+
+# local imports
+from data import Data 
 
 
 
@@ -187,14 +193,14 @@ class NeuralNetwork():
 if __name__ == "__main__":
 
 
-    settings = json.load(open('./settings.json'))
+    settings = json.load(open(Path(src_path + '/resources/settings.json')))
     
-    data = Data(settings)
+    data = Data(settings["data"])
     data.clean()
-    traning, testing = data.split_samples(train_size=0.6)
+    traning, testing = data.split_samples(settings["data"]["training ratio"])
     data.summary()
 
-    NN = NeuralNetwork(settings["neuralNetwork"])
+    NN = NeuralNetwork(settings["neural network"])
 
     NN.fit(traning)
     NN.test(testing)
