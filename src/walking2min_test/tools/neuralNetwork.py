@@ -5,7 +5,7 @@ from pathlib import Path
 from tensorflow import keras
 
 # setup work directory
-src_path = Path(__file__).parents[1].__str__()
+src_path = Path(__file__).parents[2].__str__()
 sys.path.append(src_path) if src_path not in sys.path else None
 
 # local imports
