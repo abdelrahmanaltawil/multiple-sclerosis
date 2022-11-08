@@ -1,0 +1,66 @@
+/* pancake stack */
+.parent {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.header {
+    background: lightseagreen;
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.main {
+    background: lightblue;
+    padding: 1rem;
+
+}
+
+.footer {
+    font-size: x-small;
+    background-color: lightgreen;
+    padding: 1rem;
+    display: grid;
+    place-items: center;
+}
+
+
+/* main section layout */
+.main-layout {
+    min-width: 0;
+    height:auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.options-layout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.options-sidebar {
+    flex: 0  0 445px;
+}
+
+.options-graphs {
+    flex: 2  2 auto;
+    border: 1px solid red;
+}
+
+/* 
+.options-layout :first-child {
+    flex: 0  0 445px;
+} */
+
+/* .options-layout :second-child {
+    flex: 1  1 auto;
+} */
+
+/* .options-layout > * {
+    flex: 1 1 auto;
+  } */

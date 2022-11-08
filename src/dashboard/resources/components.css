@@ -1,0 +1,45 @@
+/* label input fields */
+.label-input-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: center;
+    column-gap: 30px;
+    border: 1px solid red;
+}
+
+.dropdown {
+    width: 400px;
+}
+
+.label {
+    font-size: large;
+}
+
+/* graph field */
+.graph-flex {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    border: 1px solid red;
+}
+
+.graph-title {
+    font-size: x-large;
+    font-weight: bolder;
+    /* text-align: center; */
+    border: 1px solid red;
+}
+
+.graph {
+    /* width: auto; */
+    border: 1px solid red;
+}
+
+.table {
+    height: 300px;
+    overflow-x: auto;
+    overflow-y: auto;
+}
