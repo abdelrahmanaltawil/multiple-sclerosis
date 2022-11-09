@@ -23,6 +23,18 @@ graph LR
     train --> test(Test)
     test --> performance(Performance metrics)
     performance --> loop-ends{Search Ended?}
-    loop-ends --> |yes| return-best[Take best model Hyperparameters]
-    loop-ends --> |change hyperparameters| split
+    loop-ends --> |No| change[change hyperparameters]
+    change --> split
+    loop-ends --> |Yes| return-best[Take best model]
+    return-best --> report[/Summary Report/]
+
+    subgraph loop[Search Space Loop]
+        split
+        build
+        train
+        test
+        performance
+        loop-ends
+        change
+    end
 ```
