@@ -4,3 +4,7 @@
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
 
+# set raw dataset path
+2min_walking_test_data:
+  type: pandas.ExcelDataSet
+  filepath: data/01_raw/2MWT_data.xlsx
