@@ -1,3 +1,4 @@
+For the documentation of mermaid visit https://mermaid-js.github.io/mermaid#/
 # **Machine Learning Pipelines**
 
 ## Given hyperparameters
