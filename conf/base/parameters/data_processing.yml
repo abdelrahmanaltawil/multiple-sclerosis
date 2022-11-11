@@ -3,10 +3,3 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://kedro.readthedocs.io/en/0.18.3/kedro_project_setup/configuration.html#parameters
-
-features_columns: [
-      ["Gait - Lower Limb - Cadence L (steps/min) [mean]", "Turns - Steps in Turn (#) [std]"],
-    ],
-target_column: 2-minute Walk  (m),
-train_fraction: 0.7,
-random_state: 3,
