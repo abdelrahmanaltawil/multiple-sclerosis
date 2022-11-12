@@ -1,4 +1,5 @@
 # Multiple Sclerosis
+Machine Learning model constructed from neural network to predict the distance a patient would walk during two minutes. The test is referred as 2-min walk test and it is part of Dresden Protocol of Multidimensional Walking Assessment (DMWA). This protocol is part of clinical examination routine for people with Multiple Sclerosis disease.
 
 ## Overview
 
