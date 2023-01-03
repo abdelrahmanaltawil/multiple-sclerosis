@@ -1,0 +1,22 @@
+# This is a boilerplate parameters config generated for pipeline 'data_science'
+# using Kedro 0.18.3.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://kedro.readthedocs.io/en/0.18.3/kedro_project_setup/configuration.html#parameters
+
+neural_network:
+  model: None
+  spread: 6
+  depth: 5
+  activation: relu
+
+  optimizer: 
+      name: Adam
+      LR: 0.1
+      epoch: 1000
+
+  quality: 
+      loss: mse
+      metrics: 
+        - mae
+        - mse
