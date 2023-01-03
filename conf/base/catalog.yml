@@ -4,7 +4,33 @@
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
 
-# set raw dataset path
+# raw dataset "the content could be untyped i.e. numbers are string 
+# such in cvs files"
 2min_walking_test_data:
   type: pandas.ExcelDataSet
   filepath: data/01_raw/2MWT_data.xlsx
+
+
+# typed dataset
+typed_data:
+  type: pandas.ExcelDataSet
+  filepath: data/02_intermediate/typed_data.xlsx
+
+
+# data after integration and cleaning
+cleaned_data:
+  type: pandas.ParquetDataSet
+  filepath: data/03_primary/cleaned_data.pq
+
+
+# features data that will pass to the model
+processed_data:
+  type: pandas.ParquetDataSet
+  filepath: data/04_feature/input_data.pq
+
+
+# save machine learning models
+trained_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/trained_model.pickle
+  versioned: true
