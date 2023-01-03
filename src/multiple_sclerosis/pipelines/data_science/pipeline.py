@@ -17,19 +17,19 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=build,
                 inputs="parameters",
                 outputs="model",
-                name="model_construction_node",
+                name="model_construction",
             ),
             node(
                 func=split_data,
                 inputs=["cleaned_data", "parameters"],
                 outputs=["X_train", "X_test", "y_train", "y_test"],
-                name="data_splitting_node",
+                name="data_splitting",
             ),
             node(
                 func=train_model,
                 inputs=["model", "X_train", "y_train", "parameters"],
                 outputs="trained_model",
-                name="model_training_node",
+                name="model_training",
             )
         ]
     )
