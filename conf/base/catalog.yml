@@ -4,8 +4,8 @@
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
 
-# raw dataset "the content could be untyped i.e. numbers are string 
-# such in cvs files"
+# raw dataset "the content could be untyped i.e. numbers are string
+## such in cvs files"
 2min_walking_test_data:
   type: pandas.ExcelDataSet
   filepath: data/01_raw/2MWT_data.xlsx
