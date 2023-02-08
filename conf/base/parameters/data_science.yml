@@ -5,18 +5,16 @@
 # Link: https://kedro.readthedocs.io/en/0.18.3/kedro_project_setup/configuration.html#parameters
 
 neural_network:
-  model: None
   spread: 6
   depth: 5
   activation: relu
-
   optimizer: 
-      name: Adam
-      LR: 0.1
+      name: Adadelta
+      LR: 0.001
       epoch: 1000
 
   quality: 
       loss: mse
       metrics: 
+        - rmse
         - mae
-        - mse
