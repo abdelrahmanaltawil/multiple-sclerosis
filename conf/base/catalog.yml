@@ -65,7 +65,7 @@ training_metrics_history:
   type: pandas.ExcelDataSet
   filepath: data/08_reporting/metrics_tracking_history.xlsx
 
-mse_history:
+training_metrics_history_plot:
   type: plotly.JSONDataSet
-  filepath: data/09_tracking/mse_history.json
+  filepath: data/09_tracking/training_metrics_history_plot.json
   versioned: true
