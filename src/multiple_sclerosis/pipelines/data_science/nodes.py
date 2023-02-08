@@ -2,67 +2,24 @@
 This is a boilerplate pipeline 'data_science'
 generated using Kedro 0.18.3
 """
-
 # env imports
+import numpy as np
 import pandas as pd
 import tensorflow as tf
-import sklearn.model_selection as skl
+import plotly.express as px
+from tabulate import tabulate
+from sklearn.metrics import r2_score
+import sklearn.model_selection as skl_model_selection
+import sklearn.preprocessing as skl_preprocessing
 
 # local imports
+from multiple_sclerosis.pipelines.data_science.helpers.optimizers import get_optimizer
+from multiple_sclerosis.pipelines.data_science.helpers.metrics import get_metric
+from multiple_sclerosis.pipelines.data_science.helpers.losses import get_loss
 
 
-def build(parameters: dict) -> tf.keras.Model:
-    '''
-    Build the frame of the neural network. Here the following 
-    hyperparameter's of the network are used
-    * network depth and spread
-    * activation function
-    * optimizer
-    * LR? @NOTE
-    * loss measure
-    * quality metrics
 
-    Arguments
-    ---------
-    * `parameters`: Parameters defined in parameters.yml.
-    
-    Returns
-    --------
-    `model` : pre-training neural network model
-    '''
-
-    model = tf.keras.Sequential()
-
-    model.add(
-        tf.keras.layers.Dense(
-            parameters["neural_network"]["spread"]*90, 
-            activation=parameters["neural_network"]["activation"], 
-            use_bias = False,
-            input_shape=[90]
-            )
-        )
-
-    for i in range(1, parameters["neural_network"]["depth"]):
-        model.add(
-            tf.keras.layers.Dense(
-                    parameters["neural_network"]["spread"]*90, 
-                    use_bias=False,
-                    activation=parameters["neural_network"]["activation"]
-                    )
-                )
-
-    model.add(tf.keras.layers.Dense(1))
-
-    model.compile( 
-        loss=parameters["neural_network"]["quality"]["loss"],
-        optimizer=parameters["neural_network"]["optimizer"]["name"],
-        metrics=parameters["neural_network"]["quality"]["metrics"]
-        )
-    
-    return model
-
-
-def split_data(data: pd.DataFrame, parameters: dict) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+def split_data(data: pd.DataFrame, data_params: dict) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     '''
     Splits the data to training and test portions based on the parameters provided in 
     `multiple-sclerosis/conf/base/parameters`
@@ -77,22 +34,76 @@ def split_data(data: pd.DataFrame, parameters: dict) -> tuple[pd.DataFrame, pd.D
     `X_train`, `X_test`, `y_train`, `y_test`: training and testing data
     '''
 
-    target_data =  data.pop(parameters["data"]["target_column"])
+    target_data = data.pop(data_params["target_column"])
     features_data = data
 
     # split data
-    X_train, X_test, y_train, y_test = skl.train_test_split(
+    X_train, X_test, y_train, y_test = skl_model_selection.train_test_split(
                             features_data, 
                             target_data, 
-                            train_size=parameters["data"]["train_fraction"],
-                            random_state=parameters["data"]["random_state"]
+                            train_size= data_params["train_fraction"],
+                            random_state= data_params["random_state"]
                             )
 
 
-    return X_train, X_test, y_train, y_test
+    return X_train, y_train, X_test, y_test
 
 
-def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.DataFrame, parameters: dict) -> tf.keras.Model:
+def build(neural_network: dict) -> tf.keras.Model:
+    '''
+    Build the frame of the neural network. Here the following 
+    hyperparameter's of the network are used
+    * network depth and spread
+    * activation function
+    * optimizer
+    * LR? @NOTE
+    * loss measure
+    * quality metrics
+
+    Arguments
+    ---------
+    * `neural_network`: Parameters define the neural network, found in parameters/data_science.yml.
+    
+    Returns
+    --------
+    `model` : pre-training neural network model
+    '''
+
+    model = tf.keras.Sequential()
+
+    model.add(
+        tf.keras.layers.Dense(
+            neural_network["spread"]*90, 
+            activation= neural_network["activation"], 
+            use_bias = False,
+            input_shape=[92]
+            )
+        )
+
+    for i in range(1, neural_network["depth"]):
+        model.add(
+            tf.keras.layers.Dense(
+                    neural_network["spread"]*90, 
+                    use_bias= False,
+                    activation= neural_network["activation"]
+                    )
+                )
+
+    model.add(tf.keras.layers.Dense(1))
+
+
+    model.compile( 
+        loss= get_loss(neural_network["quality"]["loss"]),
+        optimizer= get_optimizer(neural_network["optimizer"]["name"], learning_rate= neural_network["optimizer"]["LR"]),
+        metrics= [get_metric(metric) for metric in neural_network["quality"]["metrics"]]
+        )
+    
+    print(model.summary())
+
+    return model
+
+
+def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.Series, neural_network: dict, normalize_input: bool) -> tuple:
     '''
     Train neural network using the provided samples `training_data` to train the network
     the samples are normalized before feeding to network.
@@ -109,27 +120,94 @@ def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.DataFr
     `trained_model` : trained neural network model
     '''
 
-    # data_min, data_max = training_data.min(), training_data.max()
+    # normalization and scale extraction
+    if normalize_input:
+        X_scaler = skl_preprocessing.MinMaxScaler()
+        X_train = X_scaler.fit_transform(X_train)
 
-    normalize = lambda data : (data - data.min()) / (data.max() - data.min())
-
-    X_train = normalize(X_train)
-    y_train = normalize(y_train)
-
-
-    history = model.fit(
+    # model training
+    metrics_tracing = model.fit(
                 X_train, 
                 y_train,
-                epochs = parameters["neural_network"]["optimizer"]["epoch"],
+                epochs= neural_network["optimizer"]["epoch"],
                 verbose=0
                 )
 
-    return model
+    return model, X_scaler, pd.DataFrame(metrics_tracing.history)
 
 
-def test(paramters) -> None:
+def test_model(model: tf.keras.Model, X_test: pd.DataFrame, y_test: pd.Series, normalize_input: bool, scaler: object) -> dict:
     '''
-    placeholder
+    Take testing data to see the model performance and tace the model quality measures
+    
+    Argument
+    ----------
+    testing     :   ndarray
+                    Testing samples to evaluate the model performance
     '''
 
-    print("hi")
+    # normalization
+    if normalize_input:
+        X_test = scaler.transform(X_test)
+
+    y_predicted = model.predict(X_test).flatten()
+
+    # evaluation
+    mae = tf.keras.metrics.mean_absolute_error(
+        y_true= y_test,
+        y_pred= y_predicted
+        )
+    rmse = np.sqrt(tf.keras.metrics.mean_squared_error(
+        y_true= y_test,
+        y_pred= y_predicted
+        ))
+    r_square = r2_score(
+        y_true= y_test,
+        y_pred= y_predicted
+    )
+    
+    return {"mae": mae, "rmse": rmse, "r_square": r_square}   
+
+
+def performance_report(metrics: dict) -> dict:
+    '''
+    Placeholder
+    '''
+
+    data = [
+        ["Mean Absolute Error (mae)", str(float(metrics["mae"]))],
+        ["Mean Squared Error (mse)", str(metrics["rmse"])],
+        ["R^2 (r_square)", str(metrics["r_square"])]
+        ]
+    
+    print("\nPERFORMANCE REPORT")
+    print(tabulate(data , headers=["Metric", "Value"], tablefmt='rst'),'\n')
+
+
+def performance_visualization(history: pd.DataFrame) -> tuple:
+    '''
+    Placeholder
+    '''
+
+    # plot history
+    metrics_plot = px.line(history, y=['loss', 'rmse', 'mae'])
+    
+    return metrics_plot
+
+
+# def create_confusion_matrix(y_test, y_predicted):
+#     '''
+#     Placeholder
+#     '''
+
+#     data = {"y_Actual": y_test, "y_Predicted": y_predicted}
+#     df = pd.DataFrame(data, columns=["y_Actual", "y_Predicted"])
+#     confusion_matrix = pd.crosstab(
+#         df["y_Actual"], df["y_Predicted"], rownames=["Actual"], colnames=["Predicted"]
+#     )
+#     plt = sn.heatmap(confusion_matrix, annot=True)
+
+#     mlflow.log_figure(plt, "figure")
+    
+#     return plt
+
