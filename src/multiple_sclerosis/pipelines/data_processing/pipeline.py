@@ -15,13 +15,13 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=extract_data,
-                inputs=["2min_walking_test_data", "parameters"],
-                outputs="modeling_data",
+                inputs=["2min_walking_test_paper_data", "params:data"],
+                outputs="typed_data",
                 name="data_extraction",
             ),
             node(
                 func=clean_data,
-                inputs=["modeling_data", "parameters"],
+                inputs="typed_data",
                 outputs="cleaned_data",
                 name="data_cleaning",
             ),

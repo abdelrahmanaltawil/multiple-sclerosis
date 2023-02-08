@@ -7,7 +7,7 @@ generated using Kedro 0.18.3
 from kedro.pipeline import Pipeline, node, pipeline
 
 # local imports
-from multiple_sclerosis.pipelines.data_science.nodes import build, split_data, train_model, test
+from multiple_sclerosis.pipelines.data_science.nodes import build, split_data, train_model, test_model, performance_report, performance_visualization
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -15,21 +15,38 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=build,
-                inputs="parameters",
-                outputs="model",
+                inputs="params:neural_network",
+                outputs="untrained_model",
                 name="model_construction",
             ),
             node(
                 func=split_data,
-                inputs=["cleaned_data", "parameters"],
-                outputs=["X_train", "X_test", "y_train", "y_test"],
+                inputs=["cleaned_data", "params:data"],
+                outputs=["X_train", "y_train", "X_test", "y_test"],
                 name="data_splitting",
             ),
             node(
                 func=train_model,
-                inputs=["model", "X_train", "y_train", "parameters"],
-                outputs="trained_model",
+                inputs=["untrained_model", "X_train", "y_train", "params:neural_network", "params:data.normalize_input"],
+                outputs=["trained_model", "scaler", "training_metrics_history"],
                 name="model_training",
+            ),
+            node(
+                func=test_model,
+                inputs=["trained_model", "X_test", "y_test", "params:data.normalize_input", "scaler"],
+                outputs="performance_metrics",
+                name="model_testing",
+            ),
+            node(
+                func=performance_report,
+                inputs="performance_metrics",
+                outputs= None,
+                name="performance_report",
+            ),
+            node(
+                func=performance_visualization,
+                inputs=["training_metrics_history"],
+                outputs="training_metrics_history_plot",
             )
         ]
     )
