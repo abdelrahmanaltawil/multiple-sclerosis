@@ -4,11 +4,20 @@
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
 
 
-# raw dataset "the content could be untyped i.e. numbers are string
-## such in cvs files"
+# raw data
+## project data
 2min_walking_test_data:
   type: pandas.ExcelDataSet
   filepath: data/01_raw/2MWT_data.xlsx
+
+## Dr WK paper data
+2min_walking_test_paper_data:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/2MWT_paper_data.csv
+  
+  load_args:
+    sep: "|"
+    decimal: ","
 
 
 # typed dataset
@@ -23,14 +32,40 @@ cleaned_data:
   filepath: data/03_primary/cleaned_data.pq
 
 
-# features data that will pass to the model
-processed_data:
+# data that will pass to the model
+X_train:
   type: pandas.ParquetDataSet
-  filepath: data/04_feature/input_data.pq
+  filepath: data/05_model_input/training_input.pq
+
+X_test:
+  type: pandas.ParquetDataSet
+  filepath: data/05_model_input/testing_input.pq
 
 
-# save machine learning models
+# save machine learning model
+untrained_model:
+  type: tensorflow.TensorFlowModelDataset
+  filepath: data/06_models/untrained_tensorflow_model
+  save_args:
+    overwrite: True
+    save_format: tf
+
 trained_model:
-  type: pickle.PickleDataSet
-  filepath: data/06_models/trained_model.pickle
+  type: tensorflow.TensorFlowModelDataset
+  filepath: data/06_models/trained_tensorflow_model
+  load_args:
+    compile: False
+  save_args:
+    overwrite: True
+    save_format: tf
+
+
+# tracking performance
+training_metrics_history:
+  type: pandas.ExcelDataSet
+  filepath: data/08_reporting/metrics_tracking_history.xlsx
+
+mse_history:
+  type: plotly.JSONDataSet
+  filepath: data/09_tracking/mse_history.json
   versioned: true
