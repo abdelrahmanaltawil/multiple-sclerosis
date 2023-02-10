@@ -9,7 +9,6 @@ import tensorflow as tf
 import plotly.express as px
 from tabulate import tabulate
 from sklearn.metrics import r2_score
-import sklearn.model_selection as skl_model_selection
 import sklearn.preprocessing as skl_preprocessing
 
 # local imports
@@ -18,38 +17,7 @@ from multiple_sclerosis.pipelines.data_science.helpers.metrics import get_metric
 from multiple_sclerosis.pipelines.data_science.helpers.losses import get_loss
 
 
-
-def split_data(data: pd.DataFrame, data_params: dict) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
-    '''
-    Splits the data to training and test portions based on the parameters provided in 
-    `multiple-sclerosis/conf/base/parameters`
-    
-    Arguments
-    ---------
-    * `data`: Data containing features and target.
-    * `parameters`: Parameters defined in parameters.yml.
-    
-    Returns
-    --------
-    `X_train`, `X_test`, `y_train`, `y_test`: training and testing data
-    '''
-
-    target_data = data.pop(data_params["target_column"])
-    features_data = data
-
-    # split data
-    X_train, X_test, y_train, y_test = skl_model_selection.train_test_split(
-                            features_data, 
-                            target_data, 
-                            train_size= data_params["train_fraction"],
-                            random_state= data_params["random_state"]
-                            )
-
-
-    return X_train, y_train, X_test, y_test
-
-
-def build(neural_network: dict) -> tf.keras.Model:
+def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
     '''
     Build the frame of the neural network. Here the following 
     hyperparameter's of the network are used
@@ -73,17 +41,18 @@ def build(neural_network: dict) -> tf.keras.Model:
 
     model.add(
         tf.keras.layers.Dense(
-            neural_network["spread"]*90, 
+            neural_network["spread"]*features_count, 
             activation= neural_network["activation"], 
             use_bias = False,
-            input_shape=[92]
+            # input_shape=[features_count]
+            input_shape=(features_count,)
             )
         )
 
     for i in range(1, neural_network["depth"]):
         model.add(
             tf.keras.layers.Dense(
-                    neural_network["spread"]*90, 
+                    neural_network["spread"]*features_count, 
                     use_bias= False,
                     activation= neural_network["activation"]
                     )
@@ -130,7 +99,7 @@ def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.Series
                 X_train, 
                 y_train,
                 epochs= neural_network["optimizer"]["epoch"],
-                verbose=0
+                verbose=False
                 )
 
     return model, X_scaler, pd.DataFrame(metrics_tracing.history)
@@ -161,10 +130,11 @@ def test_model(model: tf.keras.Model, X_test: pd.DataFrame, y_test: pd.Series, n
         y_true= y_test,
         y_pred= y_predicted
         ))
-    r_square = r2_score(
-        y_true= y_test,
-        y_pred= y_predicted
-    )
+    # r_square = r2_score(
+    #     y_true= y_test,
+    #     y_pred= y_predicted
+    # )
+    r_square = 0
     
     return {"mae": mae, "rmse": rmse, "r_square": r_square}   
 

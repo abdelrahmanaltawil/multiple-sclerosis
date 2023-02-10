@@ -7,7 +7,7 @@ generated using Kedro 0.18.3
 from kedro.pipeline import Pipeline, node, pipeline
 
 # local imports
-from multiple_sclerosis.pipelines.data_science.nodes import build, split_data, train_model, test_model, performance_report, performance_visualization
+from multiple_sclerosis.pipelines.data_science.nodes import build, train_model, test_model, performance_report, performance_visualization
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -18,12 +18,6 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs="params:neural_network",
                 outputs="untrained_model",
                 name="model_construction",
-            ),
-            node(
-                func=split_data,
-                inputs=["cleaned_data", "params:data"],
-                outputs=["X_train", "y_train", "X_test", "y_test"],
-                name="data_splitting",
             ),
             node(
                 func=train_model,
