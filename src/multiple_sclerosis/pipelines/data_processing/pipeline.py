@@ -7,7 +7,7 @@ generated using Kedro 0.18.3
 from kedro.pipeline import Pipeline, node, pipeline
 
 # local imports
-from multiple_sclerosis.pipelines.data_processing.nodes import extract_data, clean_data
+from multiple_sclerosis.pipelines.data_processing.nodes import extract_data, clean_data, split_data
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -24,6 +24,12 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs="typed_data",
                 outputs="cleaned_data",
                 name="data_cleaning",
+            ),
+            node(
+                func=split_data,
+                inputs=["cleaned_data", "params:data"],
+                outputs=["X_train", "y_train", "X_test", "y_test"],
+                name="data_splitting",
             ),
         ]
     )
