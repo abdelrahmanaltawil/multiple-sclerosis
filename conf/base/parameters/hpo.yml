@@ -1,0 +1,41 @@
+# This is a boilerplate parameters config generated for pipeline 'hpo'
+# using Kedro 0.18.4.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://kedro.readthedocs.io/en/0.18.4/kedro_project_setup/configuration.html#parameters
+
+# In this file you can control the set of parameters hop framework will search
+
+
+hpo:
+  study_name: Hyperparameter Optimization of 2MWT NN-Model
+  sampler: None
+  optimization_direction: minimize
+  pruner: None
+
+  spread_range:
+      - 1
+      - 6
+  
+  depth_range:
+      - 1
+      - 6
+    
+  optimizers: 
+    - Adadelta 
+    - RMSprop 
+    - Adagrad
+    - Adamax
+    - Nadam
+    - Adam
+    - Ftrl
+    - SGD
+
+  learning_rate_range:
+      - 0.0001
+      - 0.1
+
+  activation_functions:
+    - relu
+    - sigmoid
+    - softmax
