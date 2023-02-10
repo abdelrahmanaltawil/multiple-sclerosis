@@ -5,6 +5,7 @@ generated using Kedro 0.18.3
 
 # env imports
 import pandas as pd
+import sklearn.model_selection as skl_model_selection
 
 # local imports
 
@@ -52,3 +53,33 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     cleaned_data = data.dropna()
     
     return cleaned_data
+
+
+def split_data(data: pd.DataFrame, data_params: dict) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    '''
+    Splits the data to training and test portions based on the parameters provided in 
+    `multiple-sclerosis/conf/base/parameters`
+    
+    Arguments
+    ---------
+    * `data`: Data containing features and target.
+    * `parameters`: Parameters defined in parameters.yml.
+    
+    Returns
+    --------
+    `X_train`, `X_test`, `y_train`, `y_test`: training and testing data
+    '''
+
+    target_data = data.pop(data_params["target_column"]).values
+    features_data = data.values
+
+    # split data
+    X_train, X_test, y_train, y_test = skl_model_selection.train_test_split(
+                            features_data, 
+                            target_data, 
+                            train_size= data_params["train_fraction"],
+                            random_state= data_params["random_state"]
+                            )
+
+
+    return X_train, y_train, X_test, y_test
