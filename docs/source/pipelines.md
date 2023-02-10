@@ -1,7 +1,7 @@
 For the documentation of mermaid visit https://mermaid-js.github.io/mermaid#/
 # **Machine Learning Pipelines**
 
-## Given hyperparameters
+## Given hyperparameter
 ```mermaid
 graph LR
     raw[(Raw Data)] --> extract(Extract Model Data)
@@ -24,7 +24,7 @@ graph LR
     train --> test(Test)
     test --> performance(Performance metrics)
     performance --> loop-ends{Search Ended?}
-    loop-ends --> |No| change[change hyperparameters]
+    loop-ends --> |No| change[change hyperparameter]
     change --> split
     loop-ends --> |Yes| return-best[Take best model]
     return-best --> report[/Summary Report/]
