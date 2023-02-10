@@ -33,13 +33,13 @@ cleaned_data:
 
 
 # data that will pass to the model
-X_train:
-  type: pandas.ParquetDataSet
-  filepath: data/05_model_input/training_input.pq
+# X_train:
+#   type: pandas.ParquetDataSet
+#   filepath: data/05_model_input/training_input.pq
 
-X_test:
-  type: pandas.ParquetDataSet
-  filepath: data/05_model_input/testing_input.pq
+# X_test:
+#   type: pandas.ParquetDataSet
+#   filepath: data/05_model_input/testing_input.pq
 
 
 # save machine learning model
@@ -68,4 +68,20 @@ training_metrics_history:
 training_metrics_history_plot:
   type: plotly.JSONDataSet
   filepath: data/09_tracking/training_metrics_history_plot.json
+  versioned: true
+
+# hpo results
+optimization_history_plot:
+  type: plotly.JSONDataSet
+  filepath: data/09_tracking/optimization_history_plot.json
+  versioned: true
+
+parallel_coordinate_plot:
+  type: plotly.JSONDataSet
+  filepath: data/09_tracking/parallel_coordinate_plot.json
+  versioned: true
+
+param_importances_plot:
+  type: plotly.JSONDataSet
+  filepath: data/09_tracking/param_importances_plot.json
   versioned: true
