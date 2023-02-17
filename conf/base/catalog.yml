@@ -62,13 +62,19 @@ trained_model:
 
 # tracking performance
 training_metrics_history:
-  type: pandas.ExcelDataSet
-  filepath: data/08_reporting/metrics_tracking_history.xlsx
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.CSVDataSet
+    filepath: data/08_reporting/metrics_tracking_history.csv
+  artifact_path: tables
 
 training_metrics_history_plot:
-  type: plotly.JSONDataSet
-  filepath: data/09_tracking/training_metrics_history_plot.json
-  versioned: true
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
+    filepath: data/09_tracking/training_metrics_history_plot.html
+    versioned: true
+  artifact_path: plots
 
 # hpo results
 optimization_history_plot:
