@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import plotly.express as px
-from tabulate import tabulate
 from sklearn.metrics import r2_score
 import sklearn.preprocessing as skl_preprocessing
 
@@ -67,8 +66,6 @@ def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
         metrics= [get_metric(metric) for metric in neural_network["quality"]["metrics"]]
         )
     
-    print(model.summary())
-
     return model
 
 
@@ -130,13 +127,8 @@ def test_model(model: tf.keras.Model, X_test: pd.DataFrame, y_test: pd.Series, n
         y_true= y_test,
         y_pred= y_predicted
         ))
-    # r_square = r2_score(
-    #     y_true= y_test,
-    #     y_pred= y_predicted
-    # )
-    r_square = 0
     
-    return {"mae": mae, "rmse": rmse, "r_square": r_square}   
+    return {"mae": mae, "rmse": rmse}   
 
 
 def performance_report(metrics: dict) -> dict:
@@ -144,14 +136,11 @@ def performance_report(metrics: dict) -> dict:
     Placeholder
     '''
 
-    data = [
-        ["Mean Absolute Error (mae)", str(float(metrics["mae"]))],
-        ["Mean Squared Error (mse)", str(metrics["rmse"])],
-        ["R^2 (r_square)", str(metrics["r_square"])]
-        ]
-    
-    print("\nPERFORMANCE REPORT")
-    print(tabulate(data , headers=["Metric", "Value"], tablefmt='rst'),'\n')
+    print(
+        "\n# PERFORMANCE REPORT",
+        "\n## Mean Absolute Error (mae):", str(float(metrics["mae"])),
+        "\n## Mean Squared Error (mse):", str(metrics["rmse"])
+        )
 
 
 def performance_visualization(history: pd.DataFrame) -> tuple:
@@ -180,4 +169,3 @@ def performance_visualization(history: pd.DataFrame) -> tuple:
 #     mlflow.log_figure(plt, "figure")
     
 #     return plt
-
