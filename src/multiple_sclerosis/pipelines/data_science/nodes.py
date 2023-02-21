@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import plotly.express as px
-from sklearn.metrics import r2_score
 import sklearn.preprocessing as skl_preprocessing
 
 # local imports
@@ -30,7 +29,7 @@ def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
     Arguments
     ---------
     * `neural_network`: Parameters define the neural network, found in parameters/data_science.yml.
-    
+
     Returns
     --------
     `model` : pre-training neural network model
@@ -45,14 +44,20 @@ def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
             units= neural_network["spread"]*features_count, 
             activation= neural_network["activation"], 
             use_bias = False
-            ) for _ in range(neural_network["depth"])
+            ) 
+        for _ in range(neural_network["depth"])
         ]
     output_layer = tf.keras.layers.Dense(units=1, use_bias=False)
 
-    # add the layers
-    for layer in [input_layer, *hidden_layers, output_layer]:
-        model.add(layer)
+    layers = [
+        input_layer,
+        *hidden_layers,
+        output_layer
+        ]
 
+    # add the layers
+    for layer in layers:
+        model.add(layer)
 
     model.compile( 
         loss= get_loss(neural_network["quality"]["loss"]),
