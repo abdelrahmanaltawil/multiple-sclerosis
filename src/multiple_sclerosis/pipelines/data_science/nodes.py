@@ -38,26 +38,20 @@ def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
 
     model = tf.keras.Sequential()
 
-    model.add(
+    # neural network layers
+    input_layer = tf.keras.layers.InputLayer(input_shape=[features_count])
+    hidden_layers = [
         tf.keras.layers.Dense(
-            neural_network["spread"]*features_count, 
+            units= neural_network["spread"]*features_count, 
             activation= neural_network["activation"], 
-            use_bias = False,
-            # input_shape=[features_count]
-            input_shape=(features_count,)
-            )
-        )
+            use_bias = False
+            ) for _ in range(neural_network["depth"])
+        ]
+    output_layer = tf.keras.layers.Dense(units=1, use_bias=False)
 
-    for i in range(1, neural_network["depth"]):
-        model.add(
-            tf.keras.layers.Dense(
-                    neural_network["spread"]*features_count, 
-                    use_bias= False,
-                    activation= neural_network["activation"]
-                    )
-                )
-
-    model.add(tf.keras.layers.Dense(1))
+    # add the layers
+    for layer in [input_layer, *hidden_layers, output_layer]:
+        model.add(layer)
 
 
     model.compile( 
