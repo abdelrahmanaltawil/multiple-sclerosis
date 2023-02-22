@@ -43,21 +43,10 @@ cleaned_data:
 
 
 # save machine learning model
-untrained_model:
-  type: tensorflow.TensorFlowModelDataset
-  filepath: data/06_models/untrained_tensorflow_model
-  save_args:
-    overwrite: True
-    save_format: tf
-
 trained_model:
-  type: tensorflow.TensorFlowModelDataset
-  filepath: data/06_models/trained_tensorflow_model
-  load_args:
-    compile: False
-  save_args:
-    overwrite: True
-    save_format: tf
+  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
+  flavor: mlflow.tensorflow
+  artifact_path: models
 
 
 # tracking performance
