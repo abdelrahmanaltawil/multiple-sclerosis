@@ -31,7 +31,6 @@ def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_te
         '''
         # clear clutter from previous TensorFlow graphs.
         tf.keras.backend.clear_session()
-        # tf.compat.v1.disable_v2_behavior()
 
         # candidate in from the search space 
         neural_network["spread"] = trial.suggest_int("spread", *hpo["spread_range"])
@@ -43,9 +42,6 @@ def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_te
         with tf.device('/CPU:0'):
    
             model = build(neural_network)
-            # trained_model, scalers, history = train_model(model, X_train, y_train, neural_network, normalize_input)
-            # metrics = test_model(trained_model, X_test, y_test, normalize_input, scalers)
-
 
             callbacks = [
                 tf.keras.callbacks.EarlyStopping(monitor="val_rmse", patience=300, mode="min"),
