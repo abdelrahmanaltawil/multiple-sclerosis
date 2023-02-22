@@ -135,13 +135,11 @@ def performance_report(metrics: dict) -> dict:
     Placeholder
     '''
 
-    print(
-        "\n# PERFORMANCE REPORT",
-        "\n## Mean Absolute Error (mae):", str(float(metrics["mae"])),
-        "\n## Mean Squared Error (mse):", str(metrics["rmse"])
-        )
+    print("Performance report: ")
+    print("  Mean Absolute Error (mae):", str(float(metrics["mae"])))
+    print("  Mean Squared Error (mse):", str(metrics["rmse"]))
 
-
+    
 def performance_visualization(history: pd.DataFrame) -> tuple:
     '''
     Placeholder
