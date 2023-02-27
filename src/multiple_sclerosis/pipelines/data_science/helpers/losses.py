@@ -7,9 +7,9 @@ def get_loss(loss: str) -> list:
     '''
 
     tensorflow_losses = {
-    "mae"   : tf.keras.losses.MeanAbsoluteError(name="mae"),
-    "mape"  : tf.keras.losses.MeanAbsolutePercentageError(name= "mape"),
-    "mse"   : tf.keras.losses.MeanSquaredError(name= "mse")
+        "mape"  : tf.keras.losses.MeanAbsolutePercentageError(name= "mape"),
+        "mae"   : tf.keras.losses.MeanAbsoluteError(name="mae"),
+        "mse"   : tf.keras.losses.MeanSquaredError(name= "mse")
     }
     
     if loss not in tensorflow_losses.keys(): raise NotImplemented("loss not implemented")

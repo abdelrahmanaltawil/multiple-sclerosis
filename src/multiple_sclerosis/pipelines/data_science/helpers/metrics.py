@@ -7,9 +7,9 @@ def get_metric(metric: str) -> list:
     '''
 
     tensorflow_metrics = {
-    "mae"   : tf.keras.metrics.MeanAbsoluteError(name= "mae"),
-    "mse"   : tf.keras.metrics.MeanSquaredError(name= "mse"),
-    "rmse"  : tf.keras.metrics.RootMeanSquaredError(name= "rmse")
+        "rmse"  : tf.keras.metrics.RootMeanSquaredError(name= "rmse"),
+        "mae"   : tf.keras.metrics.MeanAbsoluteError(name= "mae"),
+        "mse"   : tf.keras.metrics.MeanSquaredError(name= "mse")
     }
 
     if metric not in tensorflow_metrics.keys(): raise NotImplemented("metric not implemented")
