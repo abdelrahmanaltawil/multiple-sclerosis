@@ -66,17 +66,36 @@ training_metrics_history_plot:
   artifact_path: plots
 
 # hpo results
+best_model_parameters:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: json.JSONDataSet
+    filepath: data/09_tracking/best_model_parameters.json
+    versioned: true
+
+
 optimization_history_plot:
-  type: plotly.JSONDataSet
-  filepath: data/09_tracking/optimization_history_plot.json
-  versioned: true
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
+    filepath: data/09_tracking/optimization_history_plot.html
+    versioned: true
+  artifact_path: plots
+
 
 parallel_coordinate_plot:
-  type: plotly.JSONDataSet
-  filepath: data/09_tracking/parallel_coordinate_plot.json
-  versioned: true
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
+    filepath: data/09_tracking/parallel_coordinate_plot.html
+    versioned: true
+  artifact_path: plots
+
 
 param_importances_plot:
-  type: plotly.JSONDataSet
-  filepath: data/09_tracking/param_importances_plot.json
-  versioned: true
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
+    filepath: data/09_tracking/param_importances_plot.html
+    versioned: true
+  artifact_path: plots
