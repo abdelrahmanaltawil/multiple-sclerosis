@@ -73,7 +73,7 @@ def build(neural_network: dict, X_train: pd.DataFrame) -> tf.keras.Model:
     return model
 
 
-def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.Series, neural_network: dict, normalize_input: bool) -> tuple:
+def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.Series, neural_network: dict, normalize_input: bool, callbacks: list = []) -> tuple:
     '''
     Train neural network using the provided samples `training_data` to train the network
     the samples are normalized before feeding to network.
@@ -100,7 +100,8 @@ def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.Series
                 X_train, 
                 y_train,
                 epochs= neural_network["optimizer"]["epoch"],
-                verbose=False
+                verbose=False,
+                callbacks= callbacks
                 )
 
     return model, X_scaler, pd.DataFrame(metrics_tracing.history)
