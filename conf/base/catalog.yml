@@ -32,35 +32,25 @@ cleaned_data:
   filepath: data/03_primary/cleaned_data.pq
 
 
-# data that will pass to the model
-# X_train:
-#   type: pandas.ParquetDataSet
-#   filepath: data/05_model_input/training_input.pq
-
-# X_test:
-#   type: pandas.ParquetDataSet
-#   filepath: data/05_model_input/testing_input.pq
-
-
 # save machine learning model
 trained_model:
   type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
   flavor: mlflow.tensorflow
-  artifact_path: models
+  artifact_path: Models
 
 
 # tracking performance
 ## data
 performance_metrics:
     type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
-    prefix: metric
+    prefix: model
 
 training_metrics_history:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pandas.CSVDataSet
     filepath: data/08_reporting/metrics_tracking_history.csv
-  artifact_path: tables
+  artifact_path: Tables
 
 ## plots
 training_metrics_history_plot:
@@ -69,7 +59,7 @@ training_metrics_history_plot:
     type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
     filepath: data/09_tracking/training_metrics_history_plot.html
     versioned: true
-  artifact_path: plots
+  artifact_path: Plots 
 
 # hpo results
 ## data
@@ -85,7 +75,7 @@ trials_dataframe:
   data_set:
     type: pandas.CSVDataSet
     filepath: data/08_reporting/trials_dataframe.csv
-  artifact_path: tables
+  artifact_path: Tables
 
 ## plots
 optimization_history_plot:
@@ -94,7 +84,7 @@ optimization_history_plot:
     type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
     filepath: data/09_tracking/optimization_history_plot.html
     versioned: true
-  artifact_path: plots
+  artifact_path: Plots 
 
 
 parallel_coordinate_plot:
@@ -103,7 +93,7 @@ parallel_coordinate_plot:
     type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
     filepath: data/09_tracking/parallel_coordinate_plot.html
     versioned: true
-  artifact_path: plots
+  artifact_path: Plots 
 
 
 param_importances_plot:
@@ -112,4 +102,21 @@ param_importances_plot:
     type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
     filepath: data/09_tracking/param_importances_plot.html
     versioned: true
-  artifact_path: plots
+  artifact_path: Plots 
+
+
+# ensemble learning
+## save machine learning model
+ensemble_model:
+  type: kedro_mlflow.io.models.MlflowModelLoggerDataSet
+  flavor: mlflow.sklearn
+  artifact_path: Models
+
+## reporting
+ensemble_model_report:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: text.TextDataSet
+    filepath: data/08_reporting/ensemble_model_report.html
+    versioned: true
+  artifact_path: Report
