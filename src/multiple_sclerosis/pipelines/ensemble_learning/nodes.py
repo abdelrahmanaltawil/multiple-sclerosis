@@ -10,14 +10,17 @@ import pandas as pd
 import tensorflow as tf
 import sklearn.ensemble
 from sklearn.svm import SVR
-from sklearn.linear_model import Lasso, LinearRegression
 from scikeras.wrappers import KerasRegressor
 from sklearn.tree import DecisionTreeRegressor
 import sklearn.preprocessing as skl_preprocessing
+from sklearn.linear_model import Lasso, LinearRegression
 from sklearn.ensemble import BaggingRegressor, AdaBoostRegressor, StackingRegressor
 
 # local imports
-from multiple_sclerosis.pipelines.data_science.nodes import build, train_model, test_model
+from multiple_sclerosis.pipelines.data_science.helpers.optimizers import get_optimizer
+from multiple_sclerosis.pipelines.data_science.helpers.metrics import get_metric
+from multiple_sclerosis.pipelines.data_science.helpers.losses import get_loss
+from multiple_sclerosis.pipelines.data_science.nodes import build
 
 
 def ensemble_learning(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, 
@@ -27,15 +30,12 @@ def ensemble_learning(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.Data
     Placeholder
     '''
     
-    create_model = functools.partial(
-        build,
-        neural_network= neural_network, 
-        X_train= X_train
-        )
-
     # casting the model to skl
     model = KerasRegressor(
-                    model= create_model,
+                    model= build(neural_network= neural_network, X_train= X_train),
+                    loss= get_loss(neural_network["quality"]["loss"]),
+                    optimizer= get_optimizer(neural_network["optimizer"]["name"], learning_rate= neural_network["optimizer"]["LR"]),
+                    metrics= [get_metric(metric) for metric in neural_network["quality"]["metrics"]],
                     epochs= neural_network["optimizer"]["epoch"],
                     verbose= False
                     )
@@ -44,7 +44,8 @@ def ensemble_learning(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.Data
     if ensemble_learning["method"] == "Bagging":
         ensemble = BaggingRegressor(
                         estimator= model, 
-                        n_estimators= ensemble_learning["n_estimators"]
+                        n_estimators= ensemble_learning["n_estimators"],
+                        n_jobs= 5
                         )
 
     elif ensemble_learning["method"] == "Boosting":
@@ -61,7 +62,8 @@ def ensemble_learning(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.Data
                                 ("Lasso", Lasso()),
                                 ("Support Vector Regressor", SVR())
                                 ],
-                        final_estimator= LinearRegression()
+                        final_estimator= LinearRegression(),
+                        n_jobs= 5
                         )
 
 
