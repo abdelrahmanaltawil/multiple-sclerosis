@@ -6,6 +6,7 @@ from pathlib import PurePosixPath
 from typing import Any, Dict, Union
 
 import fsspec
+import logging
 import plotly.io as pio
 from plotly import graph_objects as go
 
@@ -136,12 +137,7 @@ class HTMLDataSet(
         )
 
     def _load(self) -> Union[go.Figure, go.FigureWidget]:
-        load_path = get_filepath_str(self._get_load_path(), self._protocol)
-
-        with self._fs.open(load_path, **self._fs_open_args_load) as fs_file:
-            # read_json doesn't work correctly with file handler, so we have to read
-            # the file, decode it manually and pass to the low-level from_json instead.
-            return pio.from_json(str(fs_file.read(), "utf-8"), **self._load_args)
+        logging.info("This data set does not provide the functionality of loading")
 
     def _save(self, data: go.Figure) -> None:
         save_path = get_filepath_str(self._get_save_path(), self._protocol)
