@@ -46,8 +46,16 @@ def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_te
             model = build(neural_network, X_train)
 
             callbacks = [
-                tf.keras.callbacks.EarlyStopping(monitor="val_rmse", patience=300, mode="min"),
-                TFKerasPruningCallback(trial, "val_rmse"),
+                tf.keras.callbacks.EarlyStopping(
+                            monitor= "loss",
+                            min_delta= 1e-1, 
+                            patience= 300, 
+                            mode= "min"
+                            ),
+                TFKerasPruningCallback(
+                            trial= trial, 
+                            monitor= "loss"
+                            )
                 ]
 
             trained_model, scaler, _ = train_model(
