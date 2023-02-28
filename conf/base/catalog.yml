@@ -80,6 +80,12 @@ best_model_parameters:
     filepath: data/09_tracking/best_model_parameters.json
     versioned: true
 
+trials_dataframe:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.CSVDataSet
+    filepath: data/08_reporting/trials_dataframe.csv
+  artifact_path: tables
 
 ## plots
 optimization_history_plot:
