@@ -9,26 +9,25 @@
 
 hpo:
   study_name: Hyperparameter Optimization of 2MWT NN-Model
-  sampler: None
+  n_trials: 5
+  sampler: NSGAIISampler
   optimization_direction: minimize
-  pruner: None
+  pruner: SuccessiveHalvingPruner
 
   spread_range:
       - 1
-      - 6
+      - 10
   
   depth_range:
       - 1
-      - 6
+      - 10
     
   optimizers: 
     - Adadelta 
     - RMSprop 
     - Adagrad
     - Adamax
-    - Nadam
     - Adam
-    - Ftrl
     - SGD
 
   learning_rate_range:
@@ -37,5 +36,4 @@ hpo:
 
   activation_functions:
     - relu
-    - sigmoid
-    - softmax
+    - linear
