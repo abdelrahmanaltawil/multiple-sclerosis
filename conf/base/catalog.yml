@@ -50,6 +50,11 @@ trained_model:
 
 
 # tracking performance
+## data
+performance_metrics:
+    type: kedro_mlflow.io.metrics.MlflowMetricsDataSet
+    prefix: metric
+
 training_metrics_history:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
