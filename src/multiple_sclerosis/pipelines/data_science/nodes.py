@@ -49,7 +49,6 @@ def build(neural_network: dict, X_train: pd.DataFrame) -> tf.keras.Model:
             ) 
         for _ in range(neural_network["depth"])
         ]
-    
     output_layer = tf.keras.layers.Dense(units=1, use_bias=False)
 
     # assembly
@@ -63,7 +62,6 @@ def build(neural_network: dict, X_train: pd.DataFrame) -> tf.keras.Model:
     for layer in layers:
         model.add(layer)
 
-    # compile the model
     model.compile( 
         loss= get_loss(neural_network["quality"]["loss"]),
         optimizer= get_optimizer(neural_network["optimizer"]["name"], learning_rate= neural_network["optimizer"]["LR"]),
