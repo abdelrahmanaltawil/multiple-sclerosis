@@ -15,7 +15,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=build,
-                inputs="params:neural_network",
+                inputs=["params:neural_network", "X_train"],
                 outputs="untrained_model",
                 name="model_construction",
             ),
