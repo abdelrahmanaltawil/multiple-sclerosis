@@ -18,6 +18,8 @@ from optuna.visualization import plot_optimization_history
 
 # local imports
 from multiple_sclerosis.pipelines.data_science.nodes import build, train_model, test_model
+from multiple_sclerosis.pipelines.hpo.helpers.samplers import get_sampler
+from multiple_sclerosis.pipelines.hpo.helpers.pruners import get_pruner
 
 
 def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, 
@@ -76,12 +78,11 @@ def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_te
 
         return  metrics["rmse"]["value"]
 
-        return  history.history["val_rmse"][-1]
 
     study = optuna.create_study(
         study_name= hpo["study_name"], 
-        sampler= optuna.samplers.NSGAIISampler(),
-        pruner= optuna.pruners.SuccessiveHalvingPruner(),
+        sampler= get_sampler(hpo["sampler"]),
+        pruner= get_pruner(hpo["pruner"]),
         direction= hpo["optimization_direction"]
         )
     
@@ -100,8 +101,6 @@ def study_report(study: optuna.Study) -> dict:
     Placeholder
     '''
 
-    best_model_hyperparameters = study.best_params
-
     pruned_trials = study.get_trials(deepcopy=False, states=[TrialState.PRUNED])
     complete_trials = study.get_trials(deepcopy=False, states=[TrialState.COMPLETE])
 
@@ -109,7 +108,6 @@ def study_report(study: optuna.Study) -> dict:
     print("  Number of finished trials: ", len(study.trials))
     print("  Number of pruned trials: ", len(pruned_trials))
     print("  Number of complete trials: ", len(complete_trials))
-
     print("Best trial:")
     print("  Value: ", study.best_trial.value)
     print("  Params: ")
@@ -121,9 +119,6 @@ def study_report(study: optuna.Study) -> dict:
     trials_dataframe = study.trials_dataframe()
     metric = {"rmse": {"value" : study.best_trial.value, "step": 1}}
         
-    print("  Params: ")
-    for key, value in trial.params.items():
-        print("    {}: {}".format(key, value))    
 
     return best_trial_params, metric, trials_dataframe
 
