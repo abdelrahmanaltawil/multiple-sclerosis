@@ -64,6 +64,7 @@ def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_te
                             scaler
                             )
 
+        return  metrics["rmse"]["value"]
 
         return  history.history["val_rmse"][-1]
 
