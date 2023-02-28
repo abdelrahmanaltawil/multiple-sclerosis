@@ -9,7 +9,7 @@
 
 hpo:
   study_name: Hyperparameter Optimization of 2MWT NN-Model
-  n_trials: 5
+  n_trials: 500
   sampler: NSGAIISampler
   optimization_direction: minimize
   pruner: SuccessiveHalvingPruner
