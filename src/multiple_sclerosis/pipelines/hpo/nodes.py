@@ -77,11 +77,11 @@ def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_te
     
     study.optimize(
         func= objective, 
-        n_trials= 500, 
+        n_trials= hpo["n_trials"], 
         n_jobs= 5,
         catch= (tf.errors.InvalidArgumentError, )
         )
-
+    
     return study
 
 
