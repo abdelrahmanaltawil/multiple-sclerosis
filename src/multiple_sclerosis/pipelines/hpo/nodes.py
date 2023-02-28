@@ -41,22 +41,28 @@ def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_te
 
         with tf.device('/CPU:0'):
    
-            model = build(neural_network)
+            model = build(neural_network, X_train)
 
             callbacks = [
                 tf.keras.callbacks.EarlyStopping(monitor="val_rmse", patience=300, mode="min"),
                 TFKerasPruningCallback(trial, "val_rmse"),
                 ]
 
-            # Train model.
-            history = model.fit(
-                X_train,
-                y_train,
-                epochs= neural_network["optimizer"]["epoch"],
-                validation_data= (X_test, y_test),
-                verbose= False,
-                callbacks= callbacks,
-                )
+            trained_model, scaler, _ = train_model(
+                                            model, 
+                                            X_train, 
+                                            y_train, 
+                                            neural_network, 
+                                            normalize_input, 
+                                            callbacks=[]
+                                            )
+            metrics =  test_model(
+                            model, 
+                            X_test, 
+                            y_test, 
+                            normalize_input, 
+                            scaler
+                            )
 
 
         return  history.history["val_rmse"][-1]
