@@ -20,7 +20,9 @@ from optuna.visualization import plot_optimization_history
 from multiple_sclerosis.pipelines.data_science.nodes import build, train_model, test_model
 
 
-def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, y_test: pd.Series , neural_network: dict, normalize_input: bool, hpo: dict) -> None:
+def hyperparameters_optimization(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, 
+                                 y_test: pd.Series , neural_network: dict, normalize_input: bool, 
+                                 hpo: dict) -> optuna.Study:
     '''
     Placeholder
     '''
@@ -101,15 +103,21 @@ def study_report(study: optuna.Study) -> dict:
     print("  Number of complete trials: ", len(complete_trials))
 
     print("Best trial:")
-    trial = study.best_trial
+    print("  Value: ", study.best_trial.value)
+    print("  Params: ")
+    for key, value in study.best_trial.params.items():
+        print("    {}: {}".format(key, value))    
 
-    print("  Value: ", trial.value)
 
+    best_trial_params = study.best_trial.params
+    trials_dataframe = study.trials_dataframe()
+    metric = {"rmse": {"value" : study.best_trial.value, "step": 1}}
+        
     print("  Params: ")
     for key, value in trial.params.items():
         print("    {}: {}".format(key, value))    
 
-    return best_model_hyperparameters
+    return best_trial_params, metric, trials_dataframe
 
 
 def study_visualization(study: optuna.Study) -> None:
