@@ -140,8 +140,8 @@ def performance_report(metrics: dict) -> dict:
     '''
 
     print("Performance report: ")
-    print("  Mean Absolute Error (mae):", str(float(metrics["metric.mae"]["value"])))
-    print("  Mean Squared Error (mse):", str(metrics["metric.rmse"]["value"]))
+    print("  Mean Absolute Error (mae):", str(float(metrics["model.mae"]["value"])))
+    print("  Mean Squared Error (mse):", str(metrics["model.rmse"]["value"]))
 
     
 def performance_visualization(history: pd.DataFrame) -> tuple:
