@@ -133,7 +133,7 @@ def test_model(model: tf.keras.Model, X_test: pd.DataFrame, y_test: pd.Series, n
         y_pred= y_predicted
         ))
     
-    return {"mae": mae, "rmse": rmse}   
+    return {"mae": {"value" : mae, "step": 1}, "rmse": {"value" : rmse, "step": 1}}   
 
 
 def performance_report(metrics: dict) -> dict:
@@ -142,8 +142,8 @@ def performance_report(metrics: dict) -> dict:
     '''
 
     print("Performance report: ")
-    print("  Mean Absolute Error (mae):", str(metrics["mae"]))
-    print("  Root Mean Squared Error (rmse):", str(metrics["rmse"]))
+    print("  Mean Absolute Error (mae):", str(float(metrics["metric.mae"]["value"])))
+    print("  Mean Squared Error (mse):", str(metrics["metric.rmse"]["value"]))
 
     
 def performance_visualization(history: pd.DataFrame) -> tuple:
