@@ -62,6 +62,7 @@ training_metrics_history:
     filepath: data/08_reporting/metrics_tracking_history.csv
   artifact_path: tables
 
+## plots
 training_metrics_history_plot:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
@@ -71,6 +72,7 @@ training_metrics_history_plot:
   artifact_path: plots
 
 # hpo results
+## data
 best_model_parameters:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
@@ -79,6 +81,7 @@ best_model_parameters:
     versioned: true
 
 
+## plots
 optimization_history_plot:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
