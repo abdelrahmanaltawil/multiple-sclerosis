@@ -21,7 +21,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=study_report,
                 inputs="study",
-                outputs= None,
+                outputs= ["best_model_parameters", "performance_metrics", "trials_dataframe"],
                 name="study_report",
             ),
             node(
