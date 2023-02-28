@@ -15,7 +15,7 @@ from multiple_sclerosis.pipelines.data_science.helpers.metrics import get_metric
 from multiple_sclerosis.pipelines.data_science.helpers.losses import get_loss
 
 
-def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
+def build(neural_network: dict, X_train: pd.DataFrame) -> tf.keras.Model:
     '''
     Build the frame of the neural network. Here the following 
     hyperparameter's of the network are used
@@ -35,13 +35,15 @@ def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
     `model` : pre-training neural network model
     '''
 
-    model = tf.keras.Sequential()
+    num_features = X_train.shape[1]
+
+    model = tf.keras.Sequential(name="DFFNN")
 
     # neural network layers
-    input_layer = tf.keras.layers.InputLayer(input_shape=[features_count])
+    input_layer = tf.keras.layers.InputLayer(input_shape=[num_features])
     hidden_layers = [
         tf.keras.layers.Dense(
-            units= neural_network["spread"]*features_count, 
+            units= neural_network["spread"]*num_features, 
             activation= neural_network["activation"], 
             use_bias = False
             ) 
@@ -50,13 +52,14 @@ def build(neural_network: dict, features_count: int = 92) -> tf.keras.Model:
     
     output_layer = tf.keras.layers.Dense(units=1, use_bias=False)
 
-    # assembly of layers
+    # assembly
     layers = [
         input_layer,
         *hidden_layers,
         output_layer
         ]
 
+    # integration to model
     for layer in layers:
         model.add(layer)
 
