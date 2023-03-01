@@ -129,9 +129,9 @@ def study_visualization(study: optuna.Study) -> None:
     '''
 
     optimization_history_plot = plot_optimization_history(study)
-    # plot_intermediate_values(study)
+    intermediate_values_plot = plot_intermediate_values(study)
     parallel_coordinate_plot = plot_parallel_coordinate(study)
-    # plot_contour(study)
     param_importances_plot = plot_param_importances(study)
+    contour_plot = plot_contour(study)
 
-    return optimization_history_plot, parallel_coordinate_plot, param_importances_plot
+    return optimization_history_plot, intermediate_values_plot, parallel_coordinate_plot, param_importances_plot, contour_plot

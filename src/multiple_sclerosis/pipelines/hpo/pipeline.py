@@ -27,7 +27,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=study_visualization,
                 inputs="study",
-                outputs=["optimization_history_plot", "parallel_coordinate_plot", "param_importances_plot"],
+                outputs=["optimization_history_plot", "intermediate_values_plot", "parallel_coordinate_plot", "param_importances_plot", "contour_plot"],
                 name="study_visualization",
             )
     ])

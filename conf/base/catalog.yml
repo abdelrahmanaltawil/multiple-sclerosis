@@ -86,12 +86,28 @@ optimization_history_plot:
     versioned: true
   artifact_path: Plots 
 
+intermediate_values_plot:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
+    filepath: data/09_tracking/intermediate_values_plot.html
+    versioned: true
+  artifact_path: Plots 
+
 
 parallel_coordinate_plot:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
     filepath: data/09_tracking/parallel_coordinate_plot.html
+    versioned: true
+  artifact_path: Plots 
+
+contour_plot:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
+    filepath: data/09_tracking/contour_plot.html
     versioned: true
   artifact_path: Plots 
 
