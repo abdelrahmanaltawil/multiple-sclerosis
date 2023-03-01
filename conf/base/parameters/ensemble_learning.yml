@@ -4,15 +4,7 @@
 # Documentation for this file format can be found in "Parameters"
 # Link: https://kedro.readthedocs.io/en/0.18.4/kedro_project_setup/configuration.html#parameters
 
-# This is a boilerplate parameters config generated for pipeline 'hpo'
-# using Kedro 0.18.4.
-#
-# Documentation for this file format can be found in "Parameters"
-# Link: https://kedro.readthedocs.io/en/0.18.4/kedro_project_setup/configuration.html#parameters
-
-# In this file you can control the set of parameters hop framework will search
-
 
 ensemble_learning:
-  method: Stacking
+  method: Bagging
   n_estimators: 10
