@@ -53,11 +53,11 @@ training_metrics_history:
   artifact_path: Tables
 
 ## plots
-training_metrics_history_plot:
+loss_history_plot:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: multiple_sclerosis.extras.datasets.plotly.HTMLDataSet
-    filepath: data/09_tracking/training_metrics_history_plot.html
+    filepath: data/09_tracking/loss_history_plot.html
     versioned: true
   artifact_path: Plots 
 
