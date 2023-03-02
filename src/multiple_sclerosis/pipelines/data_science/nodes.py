@@ -163,23 +163,6 @@ def performance_visualization(history: pd.DataFrame) -> tuple:
     '''
 
     # plot history
-    metrics_plot = px.line(history, y=['loss', 'rmse', 'mae'])
+    loss_plot = px.line(history, y='loss')
     
-    return metrics_plot
-
-
-# def create_confusion_matrix(y_test, y_predicted):
-#     '''
-#     Placeholder
-#     '''
-
-#     data = {"y_Actual": y_test, "y_Predicted": y_predicted}
-#     df = pd.DataFrame(data, columns=["y_Actual", "y_Predicted"])
-#     confusion_matrix = pd.crosstab(
-#         df["y_Actual"], df["y_Predicted"], rownames=["Actual"], colnames=["Predicted"]
-#     )
-#     plt = sn.heatmap(confusion_matrix, annot=True)
-
-#     mlflow.log_figure(plt, "figure")
-    
-#     return plt
+    return loss_plot

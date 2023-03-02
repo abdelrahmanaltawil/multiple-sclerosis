@@ -39,8 +39,8 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=performance_visualization,
-                inputs=["training_metrics_history"],
-                outputs="training_metrics_history_plot",
+                inputs="training_metrics_history",
+                outputs="loss_history_plot",
             )
         ]
     )
