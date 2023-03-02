@@ -8,8 +8,9 @@ def get_pruner(pruner: str) -> optuna.pruners.BasePruner:
     '''
 
     optuna_pruners = {
+        "ThresholdPruner"           : optuna.pruners.ThresholdPruner(upper=100), 
         "SuccessiveHalvingPruner"   : optuna.pruners.SuccessiveHalvingPruner(),
-        "HyperbandPruner"           : optuna.pruners.HyperbandPruner(), 
+        "HyperbandPruner"           : optuna.pruners.HyperbandPruner(),
         "MedianPruner"              : optuna.pruners.MedianPruner(),
         "NopPruner"                 : optuna.pruners.NopPruner()
         }
