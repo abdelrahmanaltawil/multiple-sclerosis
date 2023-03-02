@@ -89,9 +89,16 @@ def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.Series
     '''
 
     # normalization and scale extraction
+    scaler = 0
     if normalize_input:
         X_scaler = skl_preprocessing.MinMaxScaler()
         X_train = X_scaler.fit_transform(X_train)
+
+        y_scaler = skl_preprocessing.MinMaxScaler()
+        y_scaler.inverse_transform
+        y_train = y_scaler.fit_transform(y_train[:, np.newaxis]).flatten()
+
+        scaler = (X_scaler, y_scaler)
 
     # model training
     metrics_tracing = model.fit(
@@ -102,7 +109,7 @@ def train_model(model: tf.keras.Model, X_train: pd.DataFrame, y_train: pd.Series
                 callbacks= callbacks
                 )
 
-    return model, X_scaler, pd.DataFrame(metrics_tracing.history)
+    return model, scaler, pd.DataFrame(metrics_tracing.history)
 
 
 def test_model(model: tf.keras.Model, X_test: pd.DataFrame, y_test: pd.Series, normalize_input: bool, scaler: object) -> dict:
@@ -117,9 +124,15 @@ def test_model(model: tf.keras.Model, X_test: pd.DataFrame, y_test: pd.Series, n
 
     # normalization
     if normalize_input:
-        X_test = scaler.transform(X_test)
+        X_scaler, y_scaler = scaler
+        X_test = X_scaler.transform(X_test)
 
     y_predicted = model.predict(X_test).flatten()
+
+    # de-normalization
+    if normalize_input:
+        y_predicted = y_scaler.inverse_transform(y_predicted[:, np.newaxis]).flatten()
+    
 
     # evaluation
     mae = tf.keras.metrics.mean_absolute_error(
